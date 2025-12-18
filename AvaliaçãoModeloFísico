@@ -1,0 +1,175 @@
+/* Lógico_1: */
+
+CREATE TABLE Usuario (
+    ID_Usuario Number(12) PRIMARY KEY,
+    Nome String(14),
+    Endereco String(13)),
+    Data_Nasc Number(8)
+);
+
+CREATE TABLE Conteudo (
+    ID_Conteúdo Number(12) PRIMARY KEY,
+    Playlist String(12),
+    Música String(11),
+    Artista String(9)
+);
+
+CREATE TABLE Musica (
+    Duracao Number(18),
+    Data_Lancamento Number(12),
+    ID_Musica Number(14),
+    fk_Playlist_ID_Playlist Number(21),
+    PRIMARY KEY (ID_Musica, fk_Playlist_ID_Playlist)
+);
+
+CREATE TABLE Playlist (
+    Nome String(12),
+    ID_Playlist Number(21) PRIMARY KEY,
+    Numero_Musicas Number(100)
+);
+
+CREATE TABLE Plano_Mensal (
+    ID_Plano Number(15) PRIMARY KEY
+);
+
+CREATE TABLE Artista (
+    ID_Artista Number(21),
+    Nome_Artista String(21),
+    Seguidores Number(21),
+    Endereco String(10),
+    fk_Playlist_ID_Playlist Number(21),
+    PRIMARY KEY (ID_Artista, fk_Playlist_ID_Playlist)
+);
+
+CREATE TABLE Adicionar_Fila_Escutara (
+    fk_Musica_ID_Musica Number(14),
+    fk_Musica_fk_Playlist_ID_Playlist Number(21),
+    fk_Usuario_ID_Usuario Number(12)
+);
+
+CREATE TABLE Adicionar_Playlist_Escutado (
+    fk_Artista_ID_Artista Number(21),
+    fk_Artista_fk_Playlist_ID_Playlist Number(21),
+    fk_Playlist_ID_Playlist Number(21)
+);
+
+CREATE TABLE Premium_Familia (
+    Tres_Dispositivos String(1),
+    Tres_Meses String(1),
+    fk_Plano_Mensal_ID_Plano Number(15) PRIMARY KEY
+);
+
+CREATE TABLE Premium_Solitario (
+    Um_Dispositivo String(1),
+    Um_Mes String(1),
+    fk_Plano_Mensal_ID_Plano Number(15) PRIMARY KEY
+);
+
+CREATE TABLE Seguir_Artista_Escutado (
+    fk_Artista_ID_Artista Number(21),
+    fk_Artista_fk_Playlist_ID_Playlist Number(21),
+    fk_Usuario_ID_Usuario Number(12)
+);
+
+CREATE TABLE Tem (
+    fk_Usuario_ID_Usuario Number(12)
+);
+
+CREATE TABLE Tem (
+    fk_Playlist_ID_Playlist Number(21)
+);
+
+CREATE TABLE Tem (
+    fk_Artista_ID_Artista Number(21),
+    fk_Artista_fk_Playlist_ID_Playlist Number(21),
+    fk_Musica_ID_Musica Number(14),
+    fk_Musica_fk_Playlist_ID_Playlist Number(21)
+);
+
+CREATE TABLE Pode_ter (
+    fk_Usuario_ID_Usuario Number(12),
+    fk_Plano_Mensal_ID_Plano Number(15)
+);
+
+CREATE TABLE Tem (
+    fk_Plano_Mensal_ID_Plano Number(15)
+);
+ 
+ALTER TABLE Musica ADD CONSTRAINT FK_Musica_2
+    FOREIGN KEY (fk_Playlist_ID_Playlist)
+    REFERENCES Playlist (ID_Playlist)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Artista ADD CONSTRAINT FK_Artista_2
+    FOREIGN KEY (fk_Playlist_ID_Playlist)
+    REFERENCES Playlist (ID_Playlist)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Adicionar_Fila_Escutara ADD CONSTRAINT FK_Adicionar_Fila_Escutara_1
+    FOREIGN KEY (fk_Musica_ID_Musica, fk_Musica_fk_Playlist_ID_Playlist)
+    REFERENCES Musica (ID_Musica, fk_Playlist_ID_Playlist);
+ 
+ALTER TABLE Adicionar_Fila_Escutara ADD CONSTRAINT FK_Adicionar_Fila_Escutara_2
+    FOREIGN KEY (fk_Usuario_ID_Usuario)
+    REFERENCES Usuario (ID_Usuario);
+ 
+ALTER TABLE Adicionar_Playlist_Escutado ADD CONSTRAINT FK_Adicionar_Playlist_Escutado_1
+    FOREIGN KEY (fk_Artista_ID_Artista, fk_Artista_fk_Playlist_ID_Playlist)
+    REFERENCES Artista (ID_Artista, fk_Playlist_ID_Playlist);
+ 
+ALTER TABLE Adicionar_Playlist_Escutado ADD CONSTRAINT FK_Adicionar_Playlist_Escutado_2
+    FOREIGN KEY (fk_Playlist_ID_Playlist)
+    REFERENCES Playlist (ID_Playlist);
+ 
+ALTER TABLE Premium_Familia ADD CONSTRAINT FK_Premium_Familia_2
+    FOREIGN KEY (fk_Plano_Mensal_ID_Plano)
+    REFERENCES Plano_Mensal (ID_Plano)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Premium_Solitario ADD CONSTRAINT FK_Premium_Solitario_2
+    FOREIGN KEY (fk_Plano_Mensal_ID_Plano)
+    REFERENCES Plano_Mensal (ID_Plano)
+    ON DELETE CASCADE;
+ 
+ALTER TABLE Seguir_Artista_Escutado ADD CONSTRAINT FK_Seguir_Artista_Escutado_1
+    FOREIGN KEY (fk_Artista_ID_Artista, fk_Artista_fk_Playlist_ID_Playlist)
+    REFERENCES Artista (ID_Artista, fk_Playlist_ID_Playlist);
+ 
+ALTER TABLE Seguir_Artista_Escutado ADD CONSTRAINT FK_Seguir_Artista_Escutado_2
+    FOREIGN KEY (fk_Usuario_ID_Usuario)
+    REFERENCES Usuario (ID_Usuario);
+ 
+ALTER TABLE Tem ADD CONSTRAINT FK_Tem_1
+    FOREIGN KEY (fk_Usuario_ID_Usuario)
+    REFERENCES Usuario (ID_Usuario)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Tem ADD CONSTRAINT FK_Tem_1
+    FOREIGN KEY (fk_Playlist_ID_Playlist)
+    REFERENCES Playlist (ID_Playlist)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Tem ADD CONSTRAINT FK_Tem_1
+    FOREIGN KEY (fk_Artista_ID_Artista, fk_Artista_fk_Playlist_ID_Playlist)
+    REFERENCES Artista (ID_Artista, fk_Playlist_ID_Playlist)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Tem ADD CONSTRAINT FK_Tem_2
+    FOREIGN KEY (fk_Musica_ID_Musica, fk_Musica_fk_Playlist_ID_Playlist)
+    REFERENCES Musica (ID_Musica, fk_Playlist_ID_Playlist)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE Pode_ter ADD CONSTRAINT FK_Pode_ter_1
+    FOREIGN KEY (fk_Usuario_ID_Usuario)
+    REFERENCES Usuario (ID_Usuario)
+    ON DELETE SET NULL;
+ 
+ALTER TABLE Pode_ter ADD CONSTRAINT FK_Pode_ter_2
+    FOREIGN KEY (fk_Plano_Mensal_ID_Plano)
+    REFERENCES Plano_Mensal (ID_Plano)
+    ON DELETE SET NULL;
+ 
+ALTER TABLE Tem ADD CONSTRAINT FK_Tem_1
+    FOREIGN KEY (fk_Plano_Mensal_ID_Plano)
+    REFERENCES Plano_Mensal (ID_Plano)
+    ON DELETE SET NULL;
